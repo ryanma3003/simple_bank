@@ -62,9 +62,9 @@ OFFSET $3
 `
 
 type ListEntrysParams struct {
-	AccountID  int64 `json:"account_id"`
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	AccountID int64 `json:"account_id"`
+	Limit     int32 `json:"limit"`
+	Offset    int32 `json:"offset"`
 }
 
 func (q *Queries) ListEntrys(ctx context.Context, arg ListEntrysParams) ([]Entries, error) {
