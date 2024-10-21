@@ -44,11 +44,9 @@ func (maker *JWTMaker) VerifyToken(token string) (*jwt.Token, error) {
 	})
 
 	if err != nil {
-		return nil, ErrExpiredToken
-	}
-
-	_, ok := jwtToken.Claims.(jwt.MapClaims)
-	if !ok && !jwtToken.Valid {
+		// if claims, ok := jwtToken.Claims.(jwt.MapClaims); !ok && !jwtToken.Valid {
+		// 	return nil, ErrExpiredToken
+		// }
 		return nil, ErrInvalidToken
 	}
 

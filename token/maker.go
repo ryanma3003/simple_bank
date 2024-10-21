@@ -14,3 +14,10 @@ type Maker interface {
 	// VerifyToken is to check if the token valid or not
 	VerifyToken(token string) (*jwt.Token, error)
 }
+
+type MakerPaseto interface {
+	// CreateToken creates a new token for a spesific username and duration
+	CreatePasetoToken(username string, duration time.Duration) (string, error)
+
+	VerifyPasetoToken(token string) (*PayloadPaseto, error)
+}

@@ -17,8 +17,8 @@ var (
 type Payload struct {
 	ID        uuid.UUID `json:"id"`
 	Username  string    `json:"username"`
-	IssuedAt  time.Time `json:"issued_at"`
-	ExpiredAt time.Time `json:"expired_at"`
+	IssuedAt  int64     `json:"issued_at"`
+	ExpiredAt int64     `json:"expired_at"`
 }
 
 // NewPayload creates a new token payload with a spesific username and duration
@@ -31,26 +31,24 @@ func NewPayload(username string, duration time.Duration) (jwt.MapClaims, error) 
 		return nil, err
 	}
 
-	// payload := &Payload{
-	// 	ID:        tokenID,
-	// 	Username:  username,
-	// 	IssuedAt:  time.Now(),
-	// 	ExpiredAt: time.Now().Add(duration),
-	// }
+	payload.Username = username
+	payload.ExpiredAt = time.Now().Add(duration).Unix()
+	payload.IssuedAt = time.Now().Unix()
 
 	payloads := jwt.MapClaims{}
 
-	payloads["id"] = payload.ID
-	payloads["username"] = username
-	payloads["issued_at"] = time.Now()
-	payloads["expired_at"] = time.Now().Add(duration)
+	payloads["sub"] = payload.ID
+	payloads["aud"] = payload.Username
+	payloads["iat"] = payload.IssuedAt
+	payloads["exp"] = payload.ExpiredAt
 
 	return payloads, nil
 }
 
 // valid checks if the token payload is valid
 func (payload *Payload) Valid() error {
-	if time.Now().After(payload.ExpiredAt) {
+	t := time.Unix(0, payload.ExpiredAt)
+	if time.Now().After(t) {
 		return ErrExpiredToken
 	}
 
